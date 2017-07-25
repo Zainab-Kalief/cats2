@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+      table{
+        border-collapse: collapse;
+      }
+      table, tr, td {
+          padding: 5px;
+          border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Welcome {{user.first_name}}</h2>
+    <p><a href="{% url 'cat:log_out' %}">Log Out</a></p>
+    <p><a href="{% url 'cat:add_cat_page' %}">Add Cat</a></p>
+    <table>
+      <th>ID
+        <td>NAME</td>
+        <td>AGE</td>
+        <td>LIKES</td>
+        <td>ACTION</td>
+      </th>
+      {% for cat in cats %}
+      <tr>
+        {% if cat.user.id == user.id %}
+          <td>{{cat.id}}</td>
+          <td>{{cat.name}}</td>
+          <td>{{cat.age}}</td>
+          <td>{{cat.cat_likes.count}}</td>
+          <td><a href="{% url 'cat:edit_cat_page' cat_id=cat.id %}">Edit</a>  <a href="{% url 'cat:delete_cat' cat_id=cat.id %}">Delete</a></td>
+        {% else %}
+          {% if user in cat.cat_likes_user %}
+            <td>{{cat.id}}</td>
+            <td>{{cat.name}}</td>
+            <td>{{cat.age}}</td>
+            <td>{{cat.cat_likes.count}}</td>
+            <td><a href="{% url 'cat:remove_like' cat_id=cat.id %}">Unlike</a></td>
+          {% else %}
+            <td>{{cat.id}}</td>
+            <td>{{cat.name}}</td>
+            <td>{{cat.age}}</td>
+            <td>{{cat.cat_likes.count}}</td>
+            <td><a href="{% url 'cat:add_like' cat_id=cat.id %}">Like</a></td>
+          {% endif %}
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
